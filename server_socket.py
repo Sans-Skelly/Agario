@@ -1,21 +1,24 @@
 #########################################
-# Programmer: Alex Karner
-# Date: 05.05.2016
+# Programmer: Mr. G
+# Date: 03.06.2015
 # File Name: server_socket.py
-# Description: This program opens a network socket and broadcasts a list. It will
-#              then recieve replys from the client and print them on screen.
+# Description: This program opens a network socket, receives data and prints it
+#               It works with the corresponding client_socket.py program.
+#               The programs are to be executed on the same computer, first the server.
 #########################################
 from socket import *
 import threading
 import Queue
 import time
 
-PORT = 3000                             # Arbitrary non-privileged port
-BUFFER_SIZE = 1024                      # Maximum amount of data that can be received at once
+PORT = 3000                             # arbitrary non-privileged port
+BUFFER_SIZE = 1024                      # maximum amount of data that can be received at once
 
 socket = socket(AF_INET, SOCK_DGRAM)
-socket.bind(('', PORT))                 # Sets "PORT" as the port that will be used for communication
 socket.setsockopt(SOL_SOCKET, SO_BROADCAST,1)
+socket.setsockopt(SOL_SOCKET, SO_REUSEADDR,1)
+socket.bind(('', PORT))                 # sets "PORT" as the port that will be used for communication
+
 
 class Recieve (threading.Thread):
     def __init__(self,q,socket,buffer_size):
@@ -27,8 +30,8 @@ class Recieve (threading.Thread):
         
     def run (self):
         while True:
-            self.m, self.ip = self.socket.recvfrom(self.buffer_size)    # Recieves ip and data from client
-            self.q.put([self.ip, self.m])                               # Puts data into queue
+            self.m, self.ip = self.socket.recvfrom(self.buffer_size)
+            self.q.put([self.ip, self.m])
                 
 class Send (threading.Thread):
     def __init__(self,q,socket):
@@ -38,9 +41,9 @@ class Send (threading.Thread):
         
     def run (self):
         while True:
-            self.socket.sendto(sent_data,('<broadcast>', PORT))         # Brodcasts the sent_data variable
-            print 'SERVER: Sent Data: '+sent_data                       # Prints sent data.
-            time.sleep(0.1)                                             # Broadcasts every 100ms.
+            self.socket.sendto(sent_data,('<broadcast>', PORT))
+            print 'SERVER: Sent Data: '+sent_data
+            time.sleep(0.1)
 
 sent_data = '1,2,3,4,5,6,7,8'
 
@@ -61,9 +64,9 @@ print 'SERVER: Started recieving thread.'
 
 
 while True:
-    if recieving.q.empty() == False:    
+    if recieving.q.empty() == False:
         client_ip, message = recieving.q.get()
         if client_ip != ('192.168.1.38',3000):
             print 'SERVER: Recieved '+str(message)+' from '+str(client_ip)
 
-conn.close()                            # Always close the connection socket; otherwise the process will stay active
+conn.close()                            # always close the connection socket; otherwise the process will stay active

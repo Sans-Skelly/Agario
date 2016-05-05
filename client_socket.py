@@ -9,14 +9,13 @@
 from socket import *
 import threading
 import Queue
-import pygame
-pygame.init()
 
 PORT = 3000                             # arbitrary non-privileged port, same as on the server
 BUFFER_SIZE = 1024                      # maximum amount of data that can be received at once
 IP = '192.168.1.38'
 
 socket = socket(AF_INET, SOCK_DGRAM)
+socket.setsockopt(SOL_SOCKET,SO_REUSEADDR,1)
 socket.bind(('',PORT))
 
 computer_number = '2'
@@ -67,7 +66,7 @@ sending.start()
 print 'CLIENT '+computer_number+': Started sending thread.'
 
 
-while running:
+while True:
     if recieving.q.empty() == False:
         string_from_queue = recieving.q.get()
         print 'CLIENT '+computer_number+': Recieved '+string_from_queue
@@ -77,11 +76,3 @@ while running:
         packed_string = ','.join(list_from_queue)
         sending.q.put(packed_string)
 
-    pygame.event.get()
-    keys = pygame.key.get.get_pressed()
-
-    if keys[pygame.K_ESCAPE]:
-        running = False
-
-
-connection.close()
