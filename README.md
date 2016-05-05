@@ -1,4 +1,4 @@
-# Agario
-Recreating the popular game of Agar.io in python using pygame.
+# Local Networking
+This branch is responsible for the local networking and data transfer for Agario.
 
 School project.
