@@ -1,4 +1,4 @@
-# Agario
-Recreating the popular game of Agar.io in python using pygame.
+# Agario Master Branch
+The final version of our game is finalized in this branch.
 
 School project.
