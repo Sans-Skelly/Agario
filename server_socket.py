@@ -10,11 +10,11 @@ import threading
 import Queue
 import time
 
-PORT = 3000                             # arbitrary non-privileged port
-BUFFER_SIZE = 1024                      # maximum amount of data that can be received at once
+PORT = 3000                             # Arbitrary non-privileged port
+BUFFER_SIZE = 1024                      # Maximum amount of data that can be received at once
 
 socket = socket(AF_INET, SOCK_DGRAM)
-socket.bind(('', PORT))                 # sets "PORT" as the port that will be used for communication
+socket.bind(('', PORT))                 # Sets "PORT" as the port that will be used for communication
 socket.setsockopt(SOL_SOCKET, SO_BROADCAST,1)
 
 class Recieve (threading.Thread):
@@ -27,8 +27,8 @@ class Recieve (threading.Thread):
         
     def run (self):
         while True:
-            self.m, self.ip = self.socket.recvfrom(self.buffer_size)    #Recieves ip and data from client
-            self.q.put([self.ip, self.m])                               #Puts data into queue
+            self.m, self.ip = self.socket.recvfrom(self.buffer_size)    # Recieves ip and data from client
+            self.q.put([self.ip, self.m])                               # Puts data into queue
                 
 class Send (threading.Thread):
     def __init__(self,q,socket):
@@ -38,9 +38,9 @@ class Send (threading.Thread):
         
     def run (self):
         while True:
-            self.socket.sendto(sent_data,('<broadcast>', PORT))         #Brodcasts the sent_data variable
-            print 'SERVER: Sent Data: '+sent_data                       #Prints sent data.
-            time.sleep(0.1)                                             #Broadcasts every 100ms.
+            self.socket.sendto(sent_data,('<broadcast>', PORT))         # Brodcasts the sent_data variable
+            print 'SERVER: Sent Data: '+sent_data                       # Prints sent data.
+            time.sleep(0.1)                                             # Broadcasts every 100ms.
 
 sent_data = '1,2,3,4,5,6,7,8'
 
@@ -66,4 +66,4 @@ while True:
         if client_ip != ('192.168.1.38',3000):
             print 'SERVER: Recieved '+str(message)+' from '+str(client_ip)
 
-conn.close()                            # always close the connection socket; otherwise the process will stay active
+conn.close()                            # Always close the connection socket; otherwise the process will stay active
