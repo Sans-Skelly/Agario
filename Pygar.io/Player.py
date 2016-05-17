@@ -2,6 +2,7 @@ import pygame
 import random
 from Food_Blobs import *
 from Additional_Functions import *
+from labels_and_text import *
 
 class Player:
     def __init__(self,surface,screenHeight,screenWidth,name = "Unamed Cell"):
@@ -13,6 +14,8 @@ class Player:
         self.surface = surface
         self.Xspeed = 0
         self.Yspeed = 0
+        self.label = myfont.render(self.name,1,(0,0,0))
+        self.label_offset = self.label.get_width()
         
     def move(self):
         speed_percentage = 1-(self.mass*0.0012)
@@ -20,6 +23,7 @@ class Player:
                     speed_percentage = 0.25 
                     
         mouseX, mouseY = pygame.mouse.get_pos()
+        
         dx = mouseX - self.x
         dy = mouseY - self.y
     
@@ -67,7 +71,11 @@ class Player:
         
     def render(self):
         pygame.draw.circle(self.surface,self.color,(self.x,self.y),self.mass/2, 0)
-
+        myfont = pygame.font.SysFont("monospace",int(self.mass/16))
+        self.label = myfont.render(self.name,1,(0,0,0))
+        self.label_offset = self.label.get_width()
+        self.surface.blit(self.label, (self.x - (self.label_offset/2),self.y))
+        
     def update(self,food_list,food_blob_list):
         self.massLoss()
         self.move()

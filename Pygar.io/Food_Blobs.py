@@ -9,13 +9,11 @@ class food_blobs:
         self.velocity = 16
         self.mouseX, self.mouseY = pygame.mouse.get_pos()
         self.angle = get_angle(self.mouseX,self.mouseY,player_X,player_Y)
-        #self.circlesegment = int(self.angle/4)
         self.points_on_circumfrence = points_on_circumfrence(player_mass/2)
         self.Xspeed = int((self.velocity*math.cos(self.angle*math.pi/180))) 
         self.Yspeed = int((self.velocity*math.sin((self.angle + 180)*math.pi/180))) 
         self.x,self.y = self.points_on_circumfrence[int(self.angle)-1]
-        self.x = int(player_X + self.x)
-        self.y = int(player_Y - self.y)
+        self.x,self.y = int(player_X + self.x),int(player_Y - self.y)
         
     def move(self): 
         self.x += self.Xspeed
