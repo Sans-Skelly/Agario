@@ -1,9 +1,9 @@
 def recieving_decoder(recieved_string):
     """ (lst)(lst) -> (str)
     Decodes food info and player info from string into list.
-    food_info format:    [[x,y,m],[x,y,m]]
-    players_info format: [[[[x,y,m],[x,y,m]],(r,g,b),name],[[[x,y,m],[x,y,m]],(r,g,b),name]]
-    String format:       'x,y,m/x,y,m|x,y,m:x,y,z;r,g,b;name/x,y,z:x,y,z;r,g,b;name'
+    food_info format:    [[x,y,t],[x,y,t]]
+    players_info format: [[[[x,y,t],[x,y,t]],(r,g,b),name],[[[x,y,m],[x,y,m]],(r,g,b),name]]
+    String format:       'x,y,t/x,y,t|x,y,m:x,y,z;r,g,b;name/x,y,z:x,y,z;r,g,b;name'
     """
 
     categories = recieved_string.split('|')
@@ -38,9 +38,9 @@ def recieving_decoder(recieved_string):
 def sending_encoder(food_info,players_info):
     """ (lst)(lst) -> (str)
     Encodes food info and player info lists into sendable string.
-    food_info format:    [[x,y,m],[x,y,m]]
-    players_info format: [[[[x,y,m],[x,y,m]],(r,g,b),name],[[[x,y,m],[x,y,m]],(r,g,b),name]]
-    String format:       'x,y,m/x,y,m|x,y,m:x,y,z;r,g,b;name/x,y,z:x,y,z;r,g,b;name'
+    food_info format:    [[x,y,t],[x,y,t]]
+    players_info format: [[[[x,y,t],[x,y,t]],(r,g,b),name],[[[x,y,m],[x,y,m]],(r,g,b),name]]
+    String format:       'x,y,t/x,y,t|x,y,m:x,y,z;r,g,b;name/x,y,z:x,y,z;r,g,b;name'
     """
     
     #Food Encoding
