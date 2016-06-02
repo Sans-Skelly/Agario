@@ -45,6 +45,7 @@ while inPlay:
     #Render Food Items
     for item in food_list:
         item.render(camera)
+        
     player.update(food_list,food_blob_list,camera,screenWidth,screenHeight)
     render_score_label(screenWidth,screenHeight,player.mass,screen)
     pygame.display.update()
