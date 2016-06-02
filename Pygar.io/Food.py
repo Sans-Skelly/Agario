@@ -16,10 +16,11 @@ class Food:
         self.x = random.randint(25,screenWidth-25)
         self.y = random.randint(25,screenHeight-25)
         self.color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
+        self.surface = surface     
              
-    def render(self,camera,surface):
+    def render(self,camera):
         """ (object) --> (None) """
-        pygame.draw.circle(surface,self.color,(int(self.x*camera.zoom+camera.x),int(self.y*camera.zoom+camera.y)),int(camera.zoom*4))
+        pygame.draw.circle(self.surface,self.color,(int(self.x*camera.zoom+camera.x),int(self.y*camera.zoom+camera.y)),int(camera.zoom*4))
             
 def spawn_food(food_list,num_of_food_elements,surface,screenHeight,screenWidth):
     """ (list),(int),(object),(int),(int) --> (list)
