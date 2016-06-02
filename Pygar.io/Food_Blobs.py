@@ -2,7 +2,11 @@ import pygame
 from Additional_Functions import *
 
 class food_blobs:
-    def __init__(self, surface, player_X, player_Y,player_mass, player_Xspeed, player_Yspeed, player_color):     
+    def __init__(self, surface, player_X, player_Y,player_mass, player_Xspeed, player_Yspeed, player_color):
+        """
+        This class assigns basic constants and variables for food that is shot out of players. Everytime a player shoots out a food
+        blob it creates a new object using this class as a template.
+        """
         self.color = player_color
         self.surface = surface
         self.acceleration = 0.65
@@ -16,6 +20,8 @@ class food_blobs:
         self.x,self.y = int(player_X + self.x),int(player_Y - self.y)
         
     def move(self): 
+        """This Function is responsible for the movement of food blobs that have shot from players
+        """
         self.x += self.Xspeed
         self.y += self.Yspeed        
         self.velocity = self.velocity * 0.965
@@ -23,6 +29,8 @@ class food_blobs:
         self.Yspeed = int((self.velocity*math.sin((self.angle + 180)*math.pi/180)))        
         
     def render(self):
+        """This function is resposible for rendering food blobs on the screen
+        """
         pygame.draw.circle(self.surface,self.color,(self.x,self.y),12)
 
     def update(self):
