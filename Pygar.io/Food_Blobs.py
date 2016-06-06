@@ -4,7 +4,7 @@ from Additional_Functions import *
 class food_blobs:
     def __init__(self, surface, player_X, player_Y,player_mass, player_Xspeed, player_Yspeed, player_color):
         """ 
-        This class assigns basic constants and variables for food that is shot out of players. Everytime a player shoots out a food
+        This class assigns basic constants and variables for food that is shot out of player objects. Everytime a player shoots out a food
         blob it creates a new object using this class as a template.
         """
         self.color = player_color
