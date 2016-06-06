@@ -7,6 +7,10 @@ import Food
 
 class Player:
     def __init__(self,surface,screenHeight,screenWidth,name = "Unamed Cell",x=None,y=None):
+    """ 
+        This portion of the Player class assigns basic constants and variables to the player object. Everytime a new player
+        object is created, it created following this template.
+    """
         self.SCREENHEIGHT = screenHeight
         self.SCREENWIDTH = screenWidth 
         if x==y==None:
@@ -28,6 +32,10 @@ class Player:
         self.veloctiy = 11
         
     def move(self,screenWidth,screenHeight):
+        """ (int),(int) ---> (None)
+        This Function is responsible for the movement of player objects, with their direction dependent upon the mouses position 
+        relative to the player object and their speed dependent upon the player's mass 
+        """
         if self.mass <= 164:
             self.velocity = 11
         if self.mass >= 165 and self.mass <= 312:
@@ -65,6 +73,10 @@ class Player:
             self.y = (3000-(self.mass/3))  
         
     def collision_detection(self, item_list, item_value, required_mass, camera):
+        """ (list),(int),(int),(object) ---> (None)
+        This function identifies collisions between a variety of different objects with the player, and is maniputable in order to set
+        indentifiers that allow the player object to comprehend what it is collidiing with and how to react
+        """
         for item in item_list:
             if distance(self.x,self.y,item.x,item.y) <= self.mass/3 and self.mass > required_mass:
                 item_list.remove(item)
@@ -86,8 +98,14 @@ class Player:
                 if item_value == 1:
                     Food.spawn_food(item_list,1,self.surface,self.SCREENHEIGHT+1100,self.SCREENWIDTH+1100)
                 #if item_value == 12:
-                                    #Food.spawn_food(item_list,12,self.surface,self.SCREENHEIGHT+1100,self.SCREENWIDTH+1100)                
+                                    #Food.spawn_food(item_list,12,self.surface,self.SCREENHEIGHT+1100,self.SCREENWIDTH+1100) 
+                                    
     def feed(self,food_blob_list,screenWidth,screenHeight,camera):
+        """ (list),(int),(int),(object) ---> (None)
+        This function checks whether the player objects mass is at or above a certain value, and if it is the function creates a food blob 
+        and appends it to the food blob list for later updating and rendering. The function also subtracts 16 mass from the player object
+        to make it seem as though the player object is actually shooting off a piece of itself
+        """
         if self.mass >= 36:
             food_blob = food_blobs(self.surface,self.x,self.y,self.mass,camera,self.color)
             food_blob_list.append(food_blob)
@@ -97,11 +115,17 @@ class Player:
             pass
     
     def split(self,surface,screenHeight,screenWidth):
-        if self.mass >= 36:
-            self.mass -= 16
-            player = Player(surface,screenHeight,screenWidth,self.name,self.x + self.mass/2,self.y)
+        """ (object),(int),(int) ---> (None)
+        As with the feed function, this function checks whether the player objects mass is at or above a certain value, and if it is...
+        (SAGNIK PLEASE FINISH WRITING FUNCTION DESCRIPTOR)
+        """
+        pass
 
     def massLoss(self):
+        """ (None) ---> (None)
+        This function has the player object lose a percentage of of its mass every time it is run, with the percentage dependant upon the
+        mass of the player object. (i.e. The higher the mass of the player; the higher the percentage of mass lossed)
+        """
         if self.mass >= 250 and self.mass <= 750:
             self.mass *= 0.9999
         elif self.mass > 750 and self.mass <=1000:
@@ -119,7 +143,12 @@ class Player:
         else:
             pass
         pass
+    
     def render(self,camera):
+        """ (None) ---> (None)
+        This function is resposible for rendering the player object on screen at the correct position, as well as consistently 
+        rendering the players over the player object
+        """
         x = int(self.x*camera.zoom+camera.x)
         y = int(self.y*camera.zoom+camera.y)
         pygame.draw.circle(self.surface,self.color,(x,y),int(self.mass/3*camera.zoom), 0)
@@ -129,6 +158,10 @@ class Player:
         self.surface.blit(self.label, (int(self.x*camera.zoom+camera.x) - (self.label_offset/2),int(self.y*camera.zoom+camera.y)))        
 
     def update(self,food_list,food_blob_list,camera,screenWidth,screenHeight):
+        """ (None) ---> (None)
+        This function is responsible for sequentially running through all of the other functions 
+        necessary to update as well as operate the player object
+        """
         self.massLoss()
         self.move(screenWidth,screenHeight)
         self.collision_detection(food_list,1,1,camera)
