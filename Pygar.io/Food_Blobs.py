@@ -3,7 +3,7 @@ from Additional_Functions import *
 
 class food_blobs:
     def __init__(self, surface, player_X, player_Y,player_mass, player_Xspeed, player_Yspeed, player_color):
-        """
+        """ 
         This class assigns basic constants and variables for food that is shot out of players. Everytime a player shoots out a food
         blob it creates a new object using this class as a template.
         """
@@ -20,7 +20,8 @@ class food_blobs:
         self.x,self.y = int(player_X + self.x),int(player_Y - self.y)
         
     def move(self): 
-        """This Function is responsible for the movement of food blobs that have shot from players
+        """ (None) ---> (None)
+        This Function is responsible for the movement of food blobs that have shot from players
         """
         self.x += self.Xspeed
         self.y += self.Yspeed        
@@ -29,11 +30,16 @@ class food_blobs:
         self.Yspeed = int((self.velocity*math.sin((self.angle + 180)*math.pi/180)))        
         
     def render(self):
-        """This function is resposible for rendering food blobs on the screen
+        """ (None) ---> (None)
+        This function is resposible for rendering food blobs on the screen
         """
         pygame.draw.circle(self.surface,self.color,(self.x,self.y),12)
 
     def update(self):
+        """ (None) ---> (None)
+        This function is responsible for sequentially running through all of the other functions 
+        necessary to update and move the food blob objects.
+        """
         self.render()
         self.move()
         
