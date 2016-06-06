@@ -1,6 +1,6 @@
 import pygame
 class Camera:
-    """ A class that deals with visual scaling of objects and determines the local coordintates of the objects.
+
     def __init__(self, screenWidth, screenHeight):
         """ (object, int, int) ---> (None)
         This is a descriptor method for the class Camera
