@@ -10,7 +10,6 @@ class Segment(food_blobs):
             if distance(self.x,self.y,item.x,item.y) <= self.mass/2 and self.mass > required_mass:
                 item_list.remove(item)
                 self.mass += 10*float(item_value)/self.mass
-##                self.cameraValue += 10*float(item_value)/self.mass
 
     def fuse(self,player,segments):
         if int(self.velocity) == 0:
