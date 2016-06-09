@@ -1,7 +1,7 @@
 import pygame
 pygame.init()
 
-class Quadrants():
+class Quadrants():                                      ## Contains all "quadrant" objects
     def __init__(self,rows,coloums,quad_length):
         self.rows = rows
         self.coloums = coloums
