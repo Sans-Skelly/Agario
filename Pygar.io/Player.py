@@ -1,16 +1,16 @@
 import pygame
 import random
-from Food_blobs import *
+from Food_Blobs import *
 from Additional_Functions import *
 from labels_and_text import *
 import Food
 
 class Player:
     def __init__(self,surface,screenHeight,screenWidth,name = "Unamed Cell",x=None,y=None):
-    """ 
+        """ 
         This portion of the Player class assigns basic constants and variables to the player object. Everytime a new player
         object is created, it created following this template.
-    """
+        """
         self.SCREENHEIGHT = screenHeight
         self.SCREENWIDTH = screenWidth 
         if x==y==None:
@@ -19,7 +19,7 @@ class Player:
         else:
             self.x = x
             self.y = y
-        self.mass = 16
+        self.mass = 2000
         self.color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
         self.name = name
         self.surface = surface
@@ -97,9 +97,9 @@ class Player:
                     self.cameraValue = self.cameraValue
                 if item_value == 1:
                     Food.spawn_food(item_list,1,self.surface,self.SCREENHEIGHT+1100,self.SCREENWIDTH+1100)
-                #if item_value == 12:
-                                    #Food.spawn_food(item_list,12,self.surface,self.SCREENHEIGHT+1100,self.SCREENWIDTH+1100) 
-                                    
+                elif item_value == 100:
+                    self.explode(camera,item_list)
+                    
     def feed(self,food_blob_list,screenWidth,screenHeight,camera):
         """ (list),(int),(int),(object) ---> (None)
         This function checks whether the player objects mass is at or above a certain value, and if it is the function creates a food blob 
@@ -113,7 +113,21 @@ class Player:
             self.cameraValue -= 5*float(16)/self.mass
         else:
             pass
-    
+
+    def explode(self,camera,viruses,food_blob_list):
+        for item in viruses:
+            if distance(self.x,self.y,item.x,item.y) <= self.mass/3 and self.mass >= 100:
+                food_blob_size = (self.mass*0.7)/8
+                segments = points_on_circumfrence(self.mass/3,7)
+                for i in range(8):
+                    x,y = segments[i]
+                    x += self.x
+                    y += self.y
+                    food_blob = food_blobs(self.surface,x,y,self.mass,camera,self.color)
+                    food_blob_list.append(food_blob)
+                    self.mass = self.mass-food_blob_size
+                    self.cameraValue -= 5*float(food_blob_size)/self.mass
+                
     def split(self,surface,screenHeight,screenWidth):
         """ (object),(int),(int) ---> (None)
         As with the feed function, this function checks whether the player objects mass is at or above a certain value, and if it is...
@@ -157,7 +171,7 @@ class Player:
         self.label_offset = self.label.get_width()
         self.surface.blit(self.label, (int(self.x*camera.zoom+camera.x) - (self.label_offset/2),int(self.y*camera.zoom+camera.y)))        
 
-    def update(self,food_list,food_blob_list,camera,screenWidth,screenHeight):
+    def update(self,food_list,food_blob_list,viruses,camera,screenWidth,screenHeight):
         """ (None) ---> (None)
         This function is responsible for sequentially running through all of the other functions 
         necessary to update as well as operate the player object
@@ -166,6 +180,7 @@ class Player:
         self.move(screenWidth,screenHeight)
         self.collision_detection(food_list,1,1,camera)
         self.collision_detection(food_blob_list,12,16,camera)
+        self.explode(camera,viruses,food_blob_list)
         self.render(camera)
         self.font_size = self.mass/11
         if self.font_size > 42:

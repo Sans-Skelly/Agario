@@ -3,10 +3,12 @@ import random
 import math
 from Player import *
 from Food import *
-from Food_blobs import *
+from Food_Blobs import *
 from Additional_Functions import *
 from Camera import *
 from labels_and_text import *
+from Segment import *
+from Virus import *
 
 WHITE = (255,255,255)
 
@@ -18,7 +20,8 @@ camera = Camera(screenWidth,screenHeight)
 food_list = []
 food_blob_list = []
 segments = []
-spawn_food(food_list,450,screen,screenHeight+2100,screenWidth+2100)
+viruses = [Virus(screen,screenHeight,screenWidth) for i in range(5)]
+spawn_food(food_list,1000,screen,screenHeight+2100,screenWidth+2100)
 pygame.key.set_repeat(1,2000)
 inPlay = True
 
@@ -31,9 +34,13 @@ while inPlay:
                 inPlay = False
             if event.key == pygame.K_SPACE:   
                 player.feed(food_blob_list,screenWidth,screenHeight,camera)
-                
+            if event.key == pygame.K_LSHIFT and segments == []:   
+                split(segments,screen,player,camera)
+
     camera.zoom = 1/(0.04*player.cameraValue) + 0.3
     camera.centre(player,screenWidth, screenHeight)
+
+    print player.mass,player.cameraValue
     
     screen.fill(WHITE)
     drawGrid(screen,screenWidth,screenHeight,camera)
@@ -45,8 +52,20 @@ while inPlay:
     #Render Food Items
     for item in food_list:
         item.render(camera)
-        
-    player.update(food_list,food_blob_list,camera,screenWidth,screenHeight)
+
+    #Render And Update Segments
+    for segment in segments:
+        segment.update(player,segments,food_list,1,1,camera)
+        segment.duration += 1
+
+    #Render And Render Player
+    player.update(food_list,food_blob_list,viruses,camera,screenWidth,screenHeight)
+
+    #Render And Update Viruses
+    for virus in viruses:
+        virus.update(camera)
+
+    #Render Score Label
     render_score_label(screenWidth,screenHeight,player.mass,screen)
     pygame.display.update()
     clock.tick(30)

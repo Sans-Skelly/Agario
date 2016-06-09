@@ -9,7 +9,7 @@ import random
 import pygame
 
 class Food:
-    def __init__(self,screenHeight,screenWidth):
+    def __init__(self,surface,screenHeight,screenWidth):
         """
         This function assigns basic constants and variables too any and all food objects
         """
