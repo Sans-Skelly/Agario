@@ -115,35 +115,19 @@ class Player:
             pass
 
     def explode(self,camera,viruses,food_blob_list):
-        for item in viruses:
-            if distance(self.x,self.y,item.x,item.y) <= self.mass/3 and self.mass >= 100:
-                food_blob_size = (self.mass*0.7)/8
-                segments = points_on_circumfrence(self.mass/3,7)
-                for i in range(8):
-                    x,y = segments[i]
-                    x += self.x
-                    y += self.y
-                    food_blob = food_blobs(self.surface,x,y,self.mass,camera,self.color)
-                    food_blob_list.append(food_blob)
-                    self.mass = self.mass-food_blob_size
-                    self.cameraValue -= 5*float(food_blob_size)/self.mass
-    
-    def explode2(self,camera,viruses,food_blob_list):
-         for item in viruses:
-            if distance(self.x,self.y,item.x,item.y) <= self.mass/3 and self.mass >= 100:
-                food_blob_size = (self.mass*0.7)/8
-                segments = points_on_circumfrence(self.mass/3,7)
-                angles = [(2*math.pi/n*x)*r for x in xrange(0,8)]
-                for i in range(8):
-                    x,y = segments[i]
-                    x += self.x
-                    y += self.y
-                    food_blob = food_blobs(self.surface,x,y,self.mass,camera,self.color)
-                    food_blob.angle = angles[i]
-                    food_blob_list.append(food_blob)
-                    self.mass = self.mass-food_blob_size
-                    self.cameraValue -= 5*float(food_blob_size)/self.mass
-                
+        food_blob_size = (self.mass*0.7)/8
+        segments = points_on_circumfrence(self.mass/3,7)
+        angles = [(2*math.pi/7*x)*(self.mass/3) for x in xrange(0,8)]
+        for i in range(8):
+            x,y = segments[i]
+            x += self.x
+            y += self.y
+            food_blob = food_blobs(self.surface,x,y,self.mass,camera,self.color)
+            food_blob.angle = angles[i]
+            food_blob_list.append(food_blob)
+            self.mass = self.mass-food_blob_size
+            self.cameraValue -= 5*float(food_blob_size)/self.mass
+
     def split(self,surface,screenHeight,screenWidth):
         """ (object),(int),(int) ---> (None)
         As with the feed function, this function checks whether the player objects mass is at or above a certain value, and if it is...
@@ -187,7 +171,7 @@ class Player:
         self.label_offset = self.label.get_width()
         self.surface.blit(self.label, (int(self.x*camera.zoom+camera.x) - (self.label_offset/2),int(self.y*camera.zoom+camera.y)))        
 
-    def update(self,food_list,food_blob_list,viruses,camera,screenWidth,screenHeight):
+    def update(self,food_list,food_blob_list,viruses,segments,camera,screenWidth,screenHeight):
         """ (None) ---> (None)
         This function is responsible for sequentially running through all of the other functions 
         necessary to update as well as operate the player object
@@ -196,8 +180,15 @@ class Player:
         self.move(screenWidth,screenHeight)
         self.collision_detection(food_list,1,1,camera)
         self.collision_detection(food_blob_list,12,16,camera)
-        self.explode(camera,viruses,food_blob_list)
         self.render(camera)
         self.font_size = self.mass/11
         if self.font_size > 42:
             self.font_size = 42
+        for item in viruses:
+            if distance(self.x,self.y,item.x,item.y) <= self.mass/3 and self.mass >= 100:
+                self.explode(camera,viruses,food_blob_list)
+            elif segments != [] and distance(self.x,self.y,item.x,item.y) <= self.mass/3 and self.mass >= 100:
+                self.explode(camera,viruses,food_blob_list)
+                totalMass = player.mass + segments[0].mass
+                player.mass = segments[0].mass = totalMass/2
+
