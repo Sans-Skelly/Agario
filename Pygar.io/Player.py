@@ -187,8 +187,8 @@ class Player:
         for item in viruses:
             if distance(self.x,self.y,item.x,item.y) <= self.mass/3 and self.mass >= 100:
                 self.explode(camera,viruses,food_blob_list)
-            elif segments != [] and distance(self.x,self.y,item.x,item.y) <= self.mass/3 and self.mass >= 100:
+            elif segments != [] and distance(segments[0].x,segments[0].y,item.x,item.y) <= segments[0].mass/3 and segments[0].mass >= 100:
                 self.explode(camera,viruses,food_blob_list)
-                totalMass = player.mass + segments[0].mass
-                player.mass = segments[0].mass = totalMass/2
+                totalMass = self.mass + segments[0].mass
+                self.mass = segments[0].mass = totalMass/2
 
