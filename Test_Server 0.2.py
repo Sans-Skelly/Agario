@@ -21,6 +21,8 @@ server_socket.listen(5) #Allows 5 connections
 ## Classes
 class Client(threading.Thread):
     def __init__(self,socket,address):
+        """This class is used to hold all information for all the clients that join the server
+        Example: ip, name, coordinates """
         threading.Thread.__init__(self)
         self.socket = socket
         self.address = address
