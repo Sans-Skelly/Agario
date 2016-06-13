@@ -33,6 +33,14 @@ while inPlay:
             if event.key == pygame.K_SPACE:   
                 player.feed(food_blob_list,screenWidth,screenHeight,camera)
 
+    pygame.event.get()
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_DOWN]:     
+        while player.velocity >= 0:
+            player.velocity -= 1
+    else:
+        player.velocity = 11
+        
     camera.zoom = 1/(0.04*player.cameraValue) + 0.3
     camera.centre(player,screenWidth, screenHeight)
 
