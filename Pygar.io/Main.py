@@ -7,7 +7,6 @@ from Food_Blobs import *
 from Additional_Functions import *
 from Camera import *
 from labels_and_text import *
-from Segment import *
 from Virus import *
 
 WHITE = (255,255,255)
@@ -19,7 +18,6 @@ player = Player(screen,screenHeight,screenWidth)
 camera = Camera(screenWidth,screenHeight)
 food_list = []
 food_blob_list = []
-segments = []
 viruses = [Virus(screen,screenHeight,screenWidth) for i in range(5)]
 spawn_food(food_list,1000,screen,screenHeight+2100,screenWidth+2100)
 pygame.key.set_repeat(1,2000)
@@ -34,8 +32,6 @@ while inPlay:
                 inPlay = False
             if event.key == pygame.K_SPACE:   
                 player.feed(food_blob_list,screenWidth,screenHeight,camera)
-            if event.key == pygame.K_LSHIFT and segments == []:   
-                split(segments,screen,player,camera)
 
     camera.zoom = 1/(0.04*player.cameraValue) + 0.3
     camera.centre(player,screenWidth, screenHeight)
@@ -52,11 +48,6 @@ while inPlay:
     #Render Food Items
     for item in food_list:
         item.render(camera)
-
-    #Render And Update Segments
-    for segment in segments:
-        segment.update(player,segments,food_list,1,1,camera)
-        segment.duration += 1
 
     #Render And Render Player
     player.update(food_list,food_blob_list,viruses,camera,screenWidth,screenHeight)
