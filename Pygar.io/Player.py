@@ -128,13 +128,6 @@ class Player:
             self.mass = self.mass-food_blob_size
             self.cameraValue -= 5*float(food_blob_size)/self.mass
 
-    def split(self,surface,screenHeight,screenWidth):
-        """ (object),(int),(int) ---> (None)
-        As with the feed function, this function checks whether the player objects mass is at or above a certain value, and if it is...
-        (SAGNIK PLEASE FINISH WRITING FUNCTION DESCRIPTOR)
-        """
-        pass
-
     def massLoss(self):
         """ (None) ---> (None)
         This function has the player object lose a percentage of of its mass every time it is run, with the percentage dependant upon the
