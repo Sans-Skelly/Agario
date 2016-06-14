@@ -11,31 +11,28 @@ class Player:
         This portion of the Player class assigns basic constants and variables to the player object. Everytime a new player
         object is created, it created following this template.
         """
-        self.SCREENHEIGHT = screenHeight
-        self.SCREENWIDTH = screenWidth 
-        if x==y==None:
-            self.x = random.randint(25,self.SCREENHEIGHT - 25)
-            self.y = random.randint(25,self.SCREENWIDTH - 25)
-        else:
-            self.x = x
-            self.y = y
-        self.mass = 2000
+        self.x = random.randint(25,screenWidth - 25)
+        self.y = random.randint(25,screenHeight - 25)
+        self.mass = 16
         self.color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
         self.name = name
         self.surface = surface
         self.Xspeed = 0
         self.Yspeed = 0
+        self.screenHeight = screenHeight
+        self.screenWidth = screenWidth 
         self.cameraValue = (self.mass/3)+3
         self.label = myfont.render(self.name,1,(0,0,0))
         self.label_offset = self.label.get_width()   
         self.font_size = 3
         self.veloctiy = 11
         
-    def move(self,screenWidth,screenHeight):
+    def move(self):
         """ (int),(int) ---> (None)
         This Function is responsible for the movement of player objects, with their direction dependent upon the mouses position 
         relative to the player object and their speed dependent upon the player's mass 
         """
+        # Bases Speed On Current Player Mass
         if self.mass <= 164:
             self.velocity = 11
         if self.mass >= 165 and self.mass <= 312:
@@ -54,8 +51,7 @@ class Player:
             self.velocity = 4  
       
         mouseX,mouseY = pygame.mouse.get_pos()
-        dist = distance(self.x,self.y,mouseX,mouseX)
-        angle = math.atan2(mouseY-screenHeight/2,mouseX-screenWidth/2)*180/math.pi
+        angle = math.atan2(mouseY-self.screenHeight/2,mouseX-self.screenWidth/2)*180/math.pi
         
         self.Xspeed = int((self.velocity*math.cos(angle*math.pi/180))) 
         self.Yspeed = int((self.velocity*math.sin(angle*math.pi/180)))    
@@ -96,11 +92,11 @@ class Player:
                 elif self.mass >= 2000:
                     self.cameraValue = self.cameraValue
                 if item_value == 1:
-                    Food.spawn_food(item_list,1,self.surface,self.SCREENHEIGHT+1100,self.SCREENWIDTH+1100)
-                elif item_value == 100:
+                    Food.spawn_food(item_list,1,self.surface,self.screenHeight+1100,self.screenWidth+1100)
+                elif item_value == 100.111:
                     self.explode(camera,item_list)
                     
-    def feed(self,food_blob_list,screenWidth,screenHeight,camera):
+    def feed(self,food_blob_list,camera):
         """ (list),(int),(int),(object) ---> (None)
         This function checks whether the player objects mass is at or above a certain value, and if it is the function creates a food blob 
         and appends it to the food blob list for later updating and rendering. The function also subtracts 16 mass from the player object
@@ -115,19 +111,21 @@ class Player:
             pass
 
     def explode(self,camera,viruses,food_blob_list):
-        food_blob_size = (self.mass*0.7)/8
-        segments = points_on_circumfrence(self.mass/3,7)
-        angles = [(2*math.pi/7*x)*(self.mass/3) for x in xrange(0,8)]
-        for i in range(8):
-            x,y = segments[i]
-            x += self.x
-            y += self.y
-            food_blob = food_blobs(self.surface,x,y,self.mass,camera,self.color)
-            food_blob.angle = angles[i]
-            food_blob_list.append(food_blob)
-            self.mass = self.mass-food_blob_size
-            self.cameraValue -= 5*float(food_blob_size)/self.mass
-
+         for item in viruses:
+            if distance(self.x,self.y,item.x,item.y) <= self.mass/3 + (100/6) and self.mass >= 100:
+                segments = points_on_circumfrence(self.mass/3,7)
+                angles = [(2*math.pi/7*x)*(self.mass/3) for x in xrange(0,8)]
+                mass_lossed = (self.mass/10)
+                for i in range(8):
+                    x,y = segments[i]
+                    x += self.x
+                    y += self.y
+                    food_blob = food_blobs(self.surface,x,y,self.mass,camera,self.color)
+                    food_blob.angle = angles[i]
+                    food_blob_list.append(food_blob)
+                    self.mass -= mass_lossed
+                    self.cameraValue -= 10*float(16)/self.mass
+                    
     def massLoss(self):
         """ (None) ---> (None)
         This function has the player object lose a percentage of of its mass every time it is run, with the percentage dependant upon the
@@ -164,24 +162,17 @@ class Player:
         self.label_offset = self.label.get_width()
         self.surface.blit(self.label, (int(self.x*camera.zoom+camera.x) - (self.label_offset/2),int(self.y*camera.zoom+camera.y)))        
 
-    def update(self,food_list,food_blob_list,viruses,segments,camera,screenWidth,screenHeight):
+    def update(self,food_list,food_blob_list,viruses,camera,screenWidth,screenHeight):
         """ (None) ---> (None)
         This function is responsible for sequentially running through all of the other functions 
         necessary to update as well as operate the player object
         """
         self.massLoss()
-        self.move(screenWidth,screenHeight)
+        self.move()
         self.collision_detection(food_list,1,1,camera)
         self.collision_detection(food_blob_list,12,16,camera)
+        self.explode(camera,viruses,food_blob_list)
         self.render(camera)
         self.font_size = self.mass/11
         if self.font_size > 42:
             self.font_size = 42
-        for item in viruses:
-            if distance(self.x,self.y,item.x,item.y) <= self.mass/3 and self.mass >= 100:
-                self.explode(camera,viruses,food_blob_list)
-            elif segments != [] and distance(segments[0].x,segments[0].y,item.x,item.y) <= segments[0].mass/3 and segments[0].mass >= 100:
-                self.explode(camera,viruses,food_blob_list)
-                totalMass = self.mass + segments[0].mass
-                self.mass = segments[0].mass = totalMass/2
-

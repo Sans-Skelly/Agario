@@ -7,20 +7,20 @@ from Food_Blobs import *
 from Additional_Functions import *
 from Camera import *
 from labels_and_text import *
+from Segment import *
 from Virus import *
+pygame.init()
 
-WHITE = (255,255,255)
-
-screenWidth = 900
-screenHeight = 900
-screen=pygame.display.set_mode((screenWidth,screenHeight))
+screenWidth, screenHeight = pygame.display.Info().current_w, pygame.display.Info().current_h
+screen=pygame.display.set_mode((screenWidth,screenHeight), pygame.FULLSCREEN,32)
 player = Player(screen,screenHeight,screenWidth)
 camera = Camera(screenWidth,screenHeight)
 food_list = []
 food_blob_list = []
-viruses = [Virus(screen,screenHeight,screenWidth) for i in range(5)]
-spawn_food(food_list,1000,screen,screenHeight+2100,screenWidth+2100)
+viruses = [Virus(screen,screenHeight,screenWidth) for i in range(25)]
+spawn_food(food_list,1000,screen,3000,3000)
 pygame.key.set_repeat(1,2000)
+WHITE = (255,255,255)
 inPlay = True
 
 clock = pygame.time.Clock()
@@ -31,20 +31,13 @@ while inPlay:
             if event.key == pygame.K_ESCAPE:
                 inPlay = False
             if event.key == pygame.K_SPACE:   
-                player.feed(food_blob_list,screenWidth,screenHeight,camera)
+                player.feed(food_blob_list,camera)
+            if event.key == pygame.K_SPACE:   
+                player.feed(food_blob_list,camera)
 
-    pygame.event.get()
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_DOWN]:     
-        while player.velocity >= 0:
-            player.velocity -= 1
-    else:
-        player.velocity = 11
-        
     camera.zoom = 1/(0.04*player.cameraValue) + 0.3
     camera.centre(player,screenWidth, screenHeight)
 
-    print player.mass,player.cameraValue
     
     screen.fill(WHITE)
     drawGrid(screen,screenWidth,screenHeight,camera)

@@ -4,7 +4,7 @@ class Virus(object):
     def __init__(self,surface,screenHeight,screenWidth):
         self.x = random.randint(25,3000)
         self.y = random.randint(25,3000)
-        self.mass = 100
+        self.mass = 100.111
         self.color = (173,255,47)
         self.borderColor = (34,139,34)
         self.surface = surface
