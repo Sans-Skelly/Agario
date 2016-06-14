@@ -1,4 +1,5 @@
 from Food_Blobs import *
+from Additional_Functions import *
 class Segment(food_blobs):
     def __init__(self, surface, player,camera):
         food_blobs.__init__(self, surface, player.x, player.y,player.mass, camera, player.color)
@@ -10,17 +11,18 @@ class Segment(food_blobs):
             if distance(self.x,self.y,item.x,item.y) <= self.mass/3 and self.mass > required_mass:
                 item_list.remove(item)
                 self.mass += 10*float(item_value)/self.mass
-##                self.cameraValue += 10*float(item_value)/self.mass
-
-    def fuse(self,player,segments):
+                
+    def fuse(self,player,segments,screenWidth,screenHeight,camera):
         if int(self.velocity) == 0:
-            self.x = player.x + player.mass/3 
-            self.y = player.y + player.mass/3
+            if distance(player.x,player.y,self.x,self.y) >= self.mass/4 + player.mass/3:
+                angle = math.atan2((player.y*camera.zoom + camera.y)-(self.y*camera.zoom + camera.y),(player.x*camera.zoom + camera.x)-(self.x*camera.zoom + camera.x))*180/math.pi                
+                self.x += int((player.velocity*math.cos(angle*math.pi/180))) 
+                self.y += int((player.velocity*math.sin(angle*math.pi/180)))
         
         if self.duration >= 1000:
             player.mass += self.mass
             segments.remove(self)
-            
+
     def explode(self,camera,viruses,food_blob_list):
         for item in viruses:
             if distance(self.x,self.y,item.x,item.y) <= self.mass/3 and self.mass >= 100:
@@ -35,17 +37,17 @@ class Segment(food_blobs):
                     food_blob.angle = angles[i]
                     food_blob_list.append(food_blob)
                     self.mass = self.mass-food_blob_size
-                    self.cameraValue -= 5*float(food_blob_size)/self.mass
-
+    
     def render(self,camera):
         pygame.draw.circle(self.surface,self.color,(int(self.x*camera.zoom+camera.x),int(self.y*camera.zoom+camera.y)),int(camera.zoom*self.mass/3),0)
 
-    def update(self,player,segments,viruses,item_list, item_value, required_mass, camera):
+    def update(self,player,segments,viruses,item_list, item_list_2, item_value,item_value_2, required_mass,required_mass_2, camera,screenWidth,screenHeight):
         self.render(camera)
         self.move()
         self.collision_detection(item_list, item_value, required_mass, camera)
-        self.fuse(player,segments)
-        self.explode(self,camera,viruses,food_blob_list)
+        self.collision_detection(item_list_2, item_value_2, required_mass_2, camera)
+        self.fuse(player,segments,screenWidth,screenHeight,camera)
+        self.explode(camera,viruses,item_list_2)
         
 def split(segments,surface,player,camera):
     if player.mass >= 32:
