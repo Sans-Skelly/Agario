@@ -2,17 +2,26 @@ from Food_Blobs import *
 from Additional_Functions import *
 class Segment(food_blobs):
     def __init__(self, surface, player,camera):
+        """(object),(object),(object),(object) ---> (None)
+        This is a constructor method for the segment class
+        """
         food_blobs.__init__(self, surface, player.x, player.y,player.mass, camera, player.color)
         self.mass = player.mass/2
         self.duration = 0
 
     def collision_detection(self, item_list, item_value, required_mass, camera):
+        """(object),(list),(int),(int),(object) ---> (None)
+        Detects collision with things.
+        """
         for item in item_list:
             if distance(self.x,self.y,item.x,item.y) <= self.mass/3 and self.mass > required_mass:
                 item_list.remove(item)
                 self.mass += 10*float(item_value)/self.mass
                 
     def fuse(self,player,segments,screenWidth,screenHeight,camera):
+        """(object),(object),(list),(int),(int),(object) ---> (None)
+        Fuses the Player and the segment
+        """
         if int(self.velocity) == 0:
             if distance(player.x,player.y,self.x,self.y) >= self.mass/4 + player.mass/3:
                 angle = math.atan2((player.y*camera.zoom + camera.y)-(self.y*camera.zoom + camera.y),(player.x*camera.zoom + camera.x)-(self.x*camera.zoom + camera.x))*180/math.pi                
@@ -24,6 +33,9 @@ class Segment(food_blobs):
             segments.remove(self)
 
     def explode(self,camera,viruses,food_blob_list):
+        """(object),(object),(list),(list) ---> (None)
+        Makes the segment explode when it collides with a virus.
+        """
         for item in viruses:
             if distance(self.x,self.y,item.x,item.y) <= self.mass/3 and self.mass >= 100:
                 food_blob_size = (self.mass*0.7)/8
@@ -39,9 +51,15 @@ class Segment(food_blobs):
                     self.mass = self.mass-food_blob_size
     
     def render(self,camera):
+        """(object),(object) ---> (None)
+        Draws the segment
+        """
         pygame.draw.circle(self.surface,self.color,(int(self.x*camera.zoom+camera.x),int(self.y*camera.zoom+camera.y)),int(camera.zoom*self.mass/3),0)
 
     def update(self,player,segments,viruses,item_list, item_list_2, item_value,item_value_2, required_mass,required_mass_2, camera,screenWidth,screenHeight):
+        """(object),(object),(list),(list),(list),(int),(int),(int),(int),(object),(int),(int) ---> (None)
+        Updates the segment
+        """
         self.render(camera)
         self.move()
         self.collision_detection(item_list, item_value, required_mass, camera)
@@ -50,6 +68,9 @@ class Segment(food_blobs):
         self.explode(camera,viruses,item_list_2)
         
 def split(segments,surface,player,camera):
+    """(list),(object),(object),(object) ---> (None)
+    Splits the player into two.
+    """
     if player.mass >= 32:
         segment = Segment(surface,player,camera)
         segments.append(segment)
