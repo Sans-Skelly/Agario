@@ -13,7 +13,7 @@ class Player:
         """
         self.x = random.randint(25,screenWidth - 25)
         self.y = random.randint(25,screenHeight - 25)
-        self.mass = 16
+        self.mass = 200
         self.color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
         self.name = name
         self.surface = surface

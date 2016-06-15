@@ -1,5 +1,6 @@
 from Food_Blobs import *
 from Additional_Functions import *
+from labels_and_text import *
 class Segment(food_blobs):
     def __init__(self, surface, player,camera):
         """(object),(object),(object),(object) ---> (None)
@@ -56,7 +57,7 @@ class Segment(food_blobs):
         """
         pygame.draw.circle(self.surface,self.color,(int(self.x*camera.zoom+camera.x),int(self.y*camera.zoom+camera.y)),int(camera.zoom*self.mass/3),0)
 
-    def update(self,player,segments,viruses,item_list, item_list_2, item_value,item_value_2, required_mass,required_mass_2, camera,screenWidth,screenHeight):
+    def update(self,surface,player,segments,viruses,item_list, item_list_2, item_value,item_value_2, required_mass,required_mass_2, camera,screenWidth,screenHeight):
         """(object),(object),(list),(list),(list),(int),(int),(int),(int),(object),(int),(int) ---> (None)
         Updates the segment
         """
@@ -66,6 +67,13 @@ class Segment(food_blobs):
         self.collision_detection(item_list_2, item_value_2, required_mass_2, camera)
         self.fuse(player,segments,screenWidth,screenHeight,camera)
         self.explode(camera,viruses,item_list_2)
+        self.render_rejoin_timer(surface,screenWidth,screenHeight)
+
+    def render_rejoin_timer(self,surface,screenWidth,screenHeight):
+        x = (screenWidth / 40)*37
+        y = screenHeight / 40
+        timer_label = myfont.render("Rejoin: " + (str(100-int(self.duration/10))),1,(0,0,0))
+        surface.blit(timer_label, (x,y))
         
 def split(segments,surface,player,camera):
     """(list),(object),(object),(object) ---> (None)

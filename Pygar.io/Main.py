@@ -17,6 +17,7 @@ player = Player(screen,screenHeight,screenWidth)
 camera = Camera(screenWidth,screenHeight)
 food_list = []
 food_blob_list = []
+segments = []
 viruses = [Virus(screen,screenHeight,screenWidth) for i in range(25)]
 spawn_food(food_list,1000,screen,3000,3000)
 pygame.key.set_repeat(1,2000)
@@ -32,8 +33,8 @@ while inPlay:
                 inPlay = False
             if event.key == pygame.K_SPACE:   
                 player.feed(food_blob_list,camera)
-            if event.key == pygame.K_SPACE:   
-                player.feed(food_blob_list,camera)
+            if event.key == pygame.K_LSHIFT:   
+                split(segments,screen,player,camera)
 
     camera.zoom = 1/(0.04*player.cameraValue) + 0.3
     camera.centre(player,screenWidth, screenHeight)
@@ -52,7 +53,7 @@ while inPlay:
         
     #Render And Update Segments
     for segment in segments:
-        segment.update(player,segments,viruses,food_list,food_blob_list,1,12,1,16,camera,screenWidth,screenHeight)
+        segment.update(screen,player,segments,viruses,food_list,food_blob_list,1,12,1,16,camera,screenWidth,screenHeight)
         segment.duration += 1
         
     #Render And Render Player
