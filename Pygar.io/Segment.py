@@ -79,7 +79,7 @@ def split(segments,surface,player,camera):
     """(list),(object),(object),(object) ---> (None)
     Splits the player into two.
     """
-    if player.mass >= 32:
+    if player.mass >= 40 and segments == []:
         segment = Segment(surface,player,camera)
         segments.append(segment)
         player.mass /= 2
