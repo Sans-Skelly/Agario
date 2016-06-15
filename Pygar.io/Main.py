@@ -49,7 +49,12 @@ while inPlay:
     #Render Food Items
     for item in food_list:
         item.render(camera)
-
+        
+    #Render And Update Segments
+    for segment in segments:
+        segment.update(player,segments,viruses,food_list,food_blob_list,1,12,1,16,camera,screenWidth,screenHeight)
+        segment.duration += 1
+        
     #Render And Render Player
     player.update(food_list,food_blob_list,viruses,camera,screenWidth,screenHeight)
 
