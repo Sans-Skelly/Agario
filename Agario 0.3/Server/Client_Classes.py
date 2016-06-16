@@ -4,6 +4,9 @@
 # File Name: Client_Classes.py
 # Description: Below is the Client class and send and recieve for the server.
 #########################################
+import threading
+import Queue
+from Encrpytion_Functions import *
 
 class Client(threading.Thread):
     def __init__(self,socket,address):
@@ -27,7 +30,7 @@ class Client(threading.Thread):
         while True:
             if self.recieving_queue.empty() == False:
                 data = self.recieving_queue.get()
-                self.x,self.y,self.m = encrypt.server_decode(data)
+                self.x,self.y,self.m = decode(data)
 
 class Send(threading.Thread):
     def __init__(self,socket,address,queue):

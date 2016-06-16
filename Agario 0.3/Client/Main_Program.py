@@ -22,7 +22,7 @@ pygame.init()
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-host = 'Server-PC'
+host = socket.gethostname()
 port = 3000
 server_address = (host,port)
 
@@ -74,7 +74,7 @@ def get_players_info():
     while inPlay:
         if recieving_queue.empty() == False:
             data = recieving_queue.get()
-            all_players_info = encrypt.client_decode(data)
+            all_players_info = decode(data)
 
 #################################################################################
 #-----------------------------Main Program--------------------------------------#
@@ -106,7 +106,7 @@ while inPlay:
     if recieving.running == False or sending.running == False:
         inPlay = False
         
-    sending_queue.put(encrypt.client_encode(player_x,player_y,player_mass))
+    sending_queue.put(encode(player_x,player_y,player_mass))
     redraw_screen()
     pygame.time.wait(30)
     

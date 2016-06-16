@@ -10,7 +10,7 @@ import threading
 import thread
 import Queue
 import pygame
-from Quadrants_Classes import *
+from Quadrant_Classes import *
 from Client_Classes import *
 from Encrpytion_Functions import *
 
@@ -40,8 +40,8 @@ server_socket.listen(8) #Allows 8 connections
 game_height = 900
 game_width = 900
 quad_length = 100
-number_of_quad_rows = screen_width/quad_length
-number_of_quad_coloums = screen_height/quad_length
+number_of_quad_rows = game_width/quad_length
+number_of_quad_coloums = game_height/quad_length
 all_quadrants = Quadrants(number_of_quad_rows,number_of_quad_coloums,quad_length)
 
 #################################################################################
@@ -49,7 +49,7 @@ all_quadrants = Quadrants(number_of_quad_rows,number_of_quad_coloums,quad_length
 #################################################################################
 def client_communication():
     while True:
-        clients_info = server_encode(connections)
+        clients_info = encode(connections)
         if clients_info != '*':
             for client in connections:
                 if client.sending_queue.full() == False:

@@ -4,6 +4,8 @@
 # File Name: Client_Classes.py
 # Description: Below is the send and receive classes of the client.
 #########################################
+import threading
+
 
 class Send(threading.Thread):
     def __init__(self,sock,queue):
