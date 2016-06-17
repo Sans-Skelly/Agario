@@ -1,9 +1,9 @@
 import pygame
 import random
 class Virus(object):
-    def __init__(self,surface,screenHeight,screenWidth):
-        self.x = random.randint(25,3000)
-        self.y = random.randint(25,3000)
+    def __init__(self,surface,playfieldWidth,playfieldHeight):
+        self.x = random.randint(25,playfieldWidth)
+        self.y = random.randint(25,playfieldHeight)
         self.mass = 100.111
         self.color = (173,255,47)
         self.borderColor = (34,139,34)

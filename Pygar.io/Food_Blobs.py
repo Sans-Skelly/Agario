@@ -2,7 +2,7 @@ import pygame
 from Additional_Functions import *
 
 class food_blobs:
-    def __init__(self, surface, player_X, player_Y,player_mass, camera, player_color):     
+    def __init__(self, surface, playfieldWidth, playfieldHeight, player_X, player_Y,player_mass, camera, player_color):     
         """ 
         This class assigns basic constants and variables for food that is shot out of player objects. Everytime a player shoots out a food
         blob it creates a new object using this class as a template.
@@ -10,8 +10,9 @@ class food_blobs:
         self.color = player_color
         self.surface = surface
         self.acceleration = 0.65
-        self.velocity = 16
+        self.velocity = 25
         self.mouseX, self.mouseY = pygame.mouse.get_pos()
+        self.playfieldWidth, self.playfieldHeight = playfieldWidth, playfieldHeight
         self.angle = get_angle(self.mouseX,self.mouseY,int(player_X*camera.zoom+camera.x),int(player_Y*camera.zoom+camera.y))
         self.points_on_circumfrence = points_on_circumfrence(player_mass/3)
         self.Xspeed = int((self.velocity*math.cos(self.angle*math.pi/180))) 
@@ -30,13 +31,13 @@ class food_blobs:
         self.Yspeed = int((self.velocity*math.sin((self.angle + 180)*math.pi/180))) 
         if self.x < 12:
             self.x = 12
-        elif self.x > (3000-(12)):
-            self.x = (3000-(12)) 
+        elif self.x > (self.playfieldWidth -(12)):
+            self.x = (self.playfieldWidth -(12)) 
             
         if self.y < 12:
             self.y = 12 
-        elif self.y > (3000-(12)):
-            self.y = (3000-(12))        
+        elif self.y > (self.playfieldHeight -(12)):
+            self.y = (self.playfieldHeight -(12))        
         
     def render(self,camera):
         """ (None) ---> (None)

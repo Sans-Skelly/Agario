@@ -4,23 +4,24 @@ from Food_Blobs import *
 from Additional_Functions import *
 from labels_and_text import *
 import Food
+pygame.mixer.init()
 
 class Player:
-    def __init__(self,surface,screenHeight,screenWidth,name = "Unamed Cell",x=None,y=None):
+    def __init__(self,surface,screenHeight,screenWidth,playfieldWidth,playfieldHeight,name = "Unamed Cell",x=None,y=None,):
         """ 
         This portion of the Player class assigns basic constants and variables to the player object. Everytime a new player
         object is created, it created following this template.
         """
         self.x = random.randint(25,screenWidth - 25)
         self.y = random.randint(25,screenHeight - 25)
-        self.mass = 200
+        self.mass = 50
         self.color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
         self.name = name
         self.surface = surface
         self.Xspeed = 0
         self.Yspeed = 0
-        self.screenHeight = screenHeight
-        self.screenWidth = screenWidth 
+        self.screenHeight, self.screenWidth = screenHeight, screenWidth
+        self.playfieldWidth, self.playfieldHeight  = playfieldWidth, playfieldHeight
         self.cameraValue = (self.mass/3)+3
         self.label = myfont.render(self.name,1,(0,0,0))
         self.label_offset = self.label.get_width()   
@@ -60,13 +61,13 @@ class Player:
 
         if self.x < self.mass/3:
             self.x = self.mass/3
-        elif self.x > (3000-(self.mass/3)):
-            self.x = (3000-(self.mass/3)) 
+        elif self.x > (self.playfieldWidth-(self.mass/3)):
+            self.x = (self.playfieldWidth-(self.mass/3)) 
             
         if self.y < self.mass/3:
             self.y = self.mass/3 
-        elif self.y > (3000-(self.mass/3)):
-            self.y = (3000-(self.mass/3))  
+        elif self.y > (self.playfieldHeight-(self.mass/3)):
+            self.y = (self.playfieldHeight-(self.mass/3))  
         
     def collision_detection(self, item_list, item_value, required_mass, camera):
         """ (list),(int),(int),(object) ---> (None)
@@ -76,25 +77,39 @@ class Player:
         for item in item_list:
             if distance(self.x,self.y,item.x,item.y) <= self.mass/3 and self.mass > required_mass:
                 item_list.remove(item)
-                self.mass += item_value
                 if self.mass <=800:
+                    self.mass += item_value
+                    pygame.mixer.Sound("Eat.wav").play()
                     self.cameraValue += 10*float(item_value)/self.mass
                 elif self.mass > 800 and self.mass <= 1200:
+                    self.mass += item_value
+                    pygame.mixer.Sound("Eat.wav").play()
                     self.cameraValue += 30*float(item_value)/self.mass
                 elif self.mass > 1150 and self.mass <= 1300:
+                    self.mass += item_value
+                    pygame.mixer.Sound("Eat.wav").play()
                     self.cameraValue += 55*float(item_value)/self.mass
                 elif self.mass > 1300 and self.mass <= 1450:
+                    self.mass += item_value
+                    pygame.mixer.Sound("Eat.wav").play()
                     self.cameraValue += 65*float(item_value)/self.mass 
                 elif self.mass > 1450 and self.mass <= 1600:
+                    self.mass += item_value
+                    pygame.mixer.Sound("Eat.wav").play()
                     self.cameraValue += 85*float(item_value)/self.mass 
                 elif self.mass > 1600 and self.mass < 2000:
+                    self.mass += item_value
+                    pygame.mixer.Sound("Eat.wav").play()
                     self.cameraValue += 120*float(item_value)/self.mass
                 elif self.mass >= 2000:
+                    self.mass += item_value
+                    pygame.mixer.Sound("Eat.wav").play()
                     self.cameraValue = self.cameraValue
                 if item_value == 1:
                     Food.spawn_food(item_list,1,self.surface,self.screenHeight+1100,self.screenWidth+1100)
                 elif item_value == 100.111:
                     self.explode(camera,item_list)
+                    pygame.mixer.explode_sound.play()
                     
     def feed(self,food_blob_list,camera):
         """ (list),(int),(int),(object) ---> (None)
@@ -103,10 +118,11 @@ class Player:
         to make it seem as though the player object is actually shooting off a piece of itself
         """
         if self.mass >= 36:
-            food_blob = food_blobs(self.surface,self.x,self.y,self.mass,camera,self.color)
+            food_blob = food_blobs(self.surface,self.playfieldWidth,self.playfieldHeight,self.x,self.y,self.mass,camera,self.color)
             food_blob_list.append(food_blob)
             self.mass = self.mass-16
             self.cameraValue -= 5*float(16)/self.mass
+            pygame.mixer.Sound("Shoot.wav").play()
         else:
             pass
 
@@ -116,11 +132,12 @@ class Player:
                 segments = points_on_circumfrence(self.mass/3,7)
                 angles = [(2*math.pi/7*x)*(self.mass/3) for x in xrange(0,8)]
                 mass_lossed = (self.mass/10)
+                pygame.mixer.Sound("Explosion.wav").play()
                 for i in range(8):
                     x,y = segments[i]
                     x += self.x
                     y += self.y
-                    food_blob = food_blobs(self.surface,x,y,self.mass,camera,self.color)
+                    food_blob = food_blobs(self.surface,self.playfieldWidth,self.playfieldHeight,x,y,self.mass,camera,self.color)
                     food_blob.angle = angles[i]
                     food_blob_list.append(food_blob)
                     self.mass -= mass_lossed
@@ -169,7 +186,7 @@ class Player:
         """
         self.massLoss()
         self.move()
-        self.collision_detection(food_list,1,1,camera)
+        self.collision_detection(food_list,10,1,camera)
         self.collision_detection(food_blob_list,12,16,camera)
         self.explode(camera,viruses,food_blob_list)
         self.render(camera)

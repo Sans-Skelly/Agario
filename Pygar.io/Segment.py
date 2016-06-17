@@ -2,11 +2,11 @@ from Food_Blobs import *
 from Additional_Functions import *
 from labels_and_text import *
 class Segment(food_blobs):
-    def __init__(self, surface, player,camera):
+    def __init__(self, surface, playfieldWidth, playfieldHeight, player, camera):
         """(object),(object),(object),(object) ---> (None)
         This is a constructor method for the segment class
         """
-        food_blobs.__init__(self, surface, player.x, player.y,player.mass, camera, player.color)
+        food_blobs.__init__(self, surface, playfieldWidth, playfieldHeight, player.x, player.y,player.mass, camera, player.color)
         self.mass = player.mass/2
         self.duration = 0
 
@@ -18,12 +18,13 @@ class Segment(food_blobs):
             if distance(self.x,self.y,item.x,item.y) <= self.mass/3 and self.mass > required_mass:
                 item_list.remove(item)
                 self.mass += 10*float(item_value)/self.mass
+                pygame.mixer.Sound("Eat.wav").play() 
                 
     def fuse(self,player,segments,screenWidth,screenHeight,camera):
         """(object),(object),(list),(int),(int),(object) ---> (None)
         Fuses the Player and the segment
         """
-        if int(self.velocity) == 0:
+        if int(self.velocity) <= 4:
             if distance(player.x,player.y,self.x,self.y) >= self.mass/4 + player.mass/3:
                 angle = math.atan2((player.y*camera.zoom + camera.y)-(self.y*camera.zoom + camera.y),(player.x*camera.zoom + camera.x)-(self.x*camera.zoom + camera.x))*180/math.pi                
                 self.x += int((player.velocity*math.cos(angle*math.pi/180))) 
@@ -32,6 +33,7 @@ class Segment(food_blobs):
         if self.duration >= 1000:
             player.mass += self.mass
             segments.remove(self)
+            pygame.mixer.Sound("Merge.wav").play()
 
     def explode(self,camera,viruses,food_blob_list):
         """(object),(object),(list),(list) ---> (None)
@@ -42,11 +44,12 @@ class Segment(food_blobs):
                 food_blob_size = (self.mass*0.7)/8
                 segments = points_on_circumfrence(self.mass/3,7)
                 angles = [(2*math.pi/7*x)*(self.mass/3) for x in xrange(0,8)]
+                pygame.mixer.Sound("Explosion.wav").play()
                 for i in range(8):
                     x,y = segments[i]
                     x += self.x
                     y += self.y
-                    food_blob = food_blobs(self.surface,x,y,self.mass,camera,self.color)
+                    food_blob = food_blobs(self.surface,self.playfieldWidth,self.playfieldHeight,x,y,self.mass,camera,self.color)
                     food_blob.angle = angles[i]
                     food_blob_list.append(food_blob)
                     self.mass = self.mass-food_blob_size
@@ -75,11 +78,10 @@ class Segment(food_blobs):
         timer_label = myfont.render("Rejoin: " + (str(100-int(self.duration/10))),1,(0,0,0))
         surface.blit(timer_label, (x,y))
         
-def split(segments,surface,player,camera):
+def split(segments,surface,playfieldWidth,playfieldHeight,player,camera):
     """(list),(object),(object),(object) ---> (None)
     Splits the player into two.
     """
-    if player.mass >= 40 and segments == []:
-        segment = Segment(surface,player,camera)
-        segments.append(segment)
-        player.mass /= 2
+    segment = Segment(surface,playfieldWidth,playfieldHeight,player,camera)
+    segments.append(segment)
+    player.mass /= 2

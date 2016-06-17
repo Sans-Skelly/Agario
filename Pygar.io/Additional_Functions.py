@@ -19,18 +19,21 @@ def get_angle(x1,y1,x2,y2):
         angle = 180 - (math.acos(adj/hyp))/(math.pi/180)
     return angle
 
-def drawGrid(surface,screenWidth,screenHeight,camera):
+def drawGrid(surface,playfieldWidth,playfieldHeight,camera):
     """(object),(int),(int),(object) ---> (none)
     This method is used to make a grid that is diplayed on your screen. The grid is not static but scales based off your camera
     and your position on the field.
     """
     GRIDSIZE = 50
     BLACK = (0,0,0)
-    start = 0
-    end = 3000
-    for i in range(start,end+1,GRIDSIZE):
-        pygame.draw.line(surface,BLACK,(start + camera.x,i*camera.zoom+camera.y),(end*camera.zoom+camera.x,i*camera.zoom+camera.y),1)
-        pygame.draw.line(surface,BLACK,(i*camera.zoom+camera.x,start + camera.y),(i*camera.zoom+camera.x,end*camera.zoom+camera.y),1)
+    H_Start = 0
+    H_End = playfieldWidth
+    V_Start = 0
+    V_End = playfieldHeight
+    for i in range(H_Start,H_End+1,GRIDSIZE):
+        pygame.draw.line(surface,BLACK,(i*camera.zoom+camera.x,V_Start + camera.y),(i*camera.zoom+camera.x,V_End*camera.zoom+camera.y),1)
+    for i in range(V_Start,V_End+1,GRIDSIZE):
+        pygame.draw.line(surface,BLACK,(H_Start + camera.x,i*camera.zoom+camera.y),(H_End*camera.zoom+camera.x,i*camera.zoom+camera.y),1)
         
 def points_on_circumfrence(r,n=359):
     """(int)(int) ---> (list)

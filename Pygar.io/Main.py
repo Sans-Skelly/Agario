@@ -12,36 +12,37 @@ from Virus import *
 pygame.init()
 
 screenWidth, screenHeight = pygame.display.Info().current_w, pygame.display.Info().current_h
+playfieldWidth, playfieldHeight = 100,100
 screen=pygame.display.set_mode((screenWidth,screenHeight), pygame.FULLSCREEN,32)
-player = Player(screen,screenHeight,screenWidth)
+player = Player(screen,screenHeight,screenWidth,playfieldWidth,playfieldHeight)
 camera = Camera(screenWidth,screenHeight)
 food_list = []
 food_blob_list = []
 segments = []
-viruses = [Virus(screen,screenHeight,screenWidth) for i in range(25)]
-spawn_food(food_list,1000,screen,3000,3000)
+viruses = [Virus(screen,playfieldWidth,playfieldHeight) for i in range(25)]
+spawn_food(food_list,1000,screen,playfieldHeight,playfieldWidth)
 pygame.key.set_repeat(1,2000)
 WHITE = (255,255,255)
 inPlay = True
+clock = pygame.time.Clock() 
 
-clock = pygame.time.Clock()
-
-while inPlay: 
+while inPlay:
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 inPlay = False
             if event.key == pygame.K_SPACE:   
                 player.feed(food_blob_list,camera)
-            if event.key == pygame.K_LSHIFT:   
-                split(segments,screen,player,camera)
+            if event.key == pygame.K_LSHIFT and segments == [] and player.mass >= 32:   
+                split(segments,screen,playfieldWidth,playfieldHeight,player,camera)
+                pygame.mixer.Sound("Split.wav").play()
 
     camera.zoom = 1/(0.04*player.cameraValue) + 0.3
     camera.centre(player,screenWidth, screenHeight)
 
     
     screen.fill(WHITE)
-    drawGrid(screen,screenWidth,screenHeight,camera)
+    drawGrid(screen,playfieldWidth,playfieldHeight,camera)
     
     #Render Food Blobs
     for item in food_blob_list:
