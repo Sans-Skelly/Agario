@@ -2,7 +2,7 @@ import pygame
 class Camera:
 
     def __init__(self, screenWidth, screenHeight):
-        """ (object, int, int) ---> (None)
+        """ (int), (int) ---> (None)
         This is a descriptor method for the class Camera
         """
         self.x = 0
@@ -14,7 +14,7 @@ class Camera:
         self.zoom = 10.0
 
     def centre(self,player,screenWidth,screenHeight):
-        """ (object,object,int,int) ---> (None)
+        """ (object),(int),(int) ---> (None)
         Centres the player on the screen
         """
         self.x = (screenWidth/2)-(player.x*self.zoom)
