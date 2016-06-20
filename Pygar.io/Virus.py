@@ -2,7 +2,7 @@ import pygame
 import random
 class Virus(object):
     def __init__(self,surface,playfieldWidth,playfieldHeight):
-        """(object),(object),(int),(int) ---> (None)
+        """(object),(int),(int) ---> (None)
         Construtor Method for Viruses. 
         """
         self.x = random.randint(25,playfieldWidth)
@@ -13,7 +13,7 @@ class Virus(object):
         self.surface = surface
     
     def render(self,camera):
-        """(object),(object) ---> (None)
+        """(object) ---> (None)
         Construtor Method for Viruses. 
         """ 
         x = int(self.x*camera.zoom+camera.x)
@@ -22,7 +22,7 @@ class Virus(object):
         pygame.draw.circle(self.surface,self.borderColor,(x,y),int(self.mass/3*camera.zoom),5)
         
     def update(self,camera):
-        """(object),(object) ---> (None)
+        """(object) ---> (None)
         Updates Viruses.
         """
         self.render(camera)
