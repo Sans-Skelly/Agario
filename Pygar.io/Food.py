@@ -19,7 +19,9 @@ class Food:
         self.surface = surface     
              
     def render(self,camera):
-        """ (object) --> (None) """
+        """ (object) --> (None) 
+        Draws food on the screen
+        """
         pygame.draw.circle(self.surface,self.color,(int(self.x*camera.zoom+camera.x),int(self.y*camera.zoom+camera.y)),int(camera.zoom*4))
             
 def spawn_food(food_list,num_of_food_elements,surface,screenHeight,screenWidth):
