@@ -60,7 +60,7 @@ class Segment(food_blobs):
         """
         pygame.draw.circle(self.surface,self.color,(int(self.x*camera.zoom+camera.x),int(self.y*camera.zoom+camera.y)),int(camera.zoom*self.mass/3),0)
 
-    def update(self,surface,player,segments,viruses,item_list, item_list_2, item_value,item_value_2, required_mass,required_mass_2,screenWidth,screenHeight,camera):
+    def update(self,surface,player,segments,viruses,item_list, item_list_2, item_value,item_value_2, required_mass,required_mass_2, camera,screenWidth,screenHeight):
         """(object),(object),(list),(list),(list),(list),(int),(int),(int),(int),(int),(int),(object) ---> (None)
         Updates the segment
         """
