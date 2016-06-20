@@ -10,7 +10,7 @@ class Player:
     def __init__(self,surface,screenHeight,screenWidth,playfieldWidth,playfieldHeight,name = "Unamed Cell",x=None,y=None,):
         """ 
         This portion of the Player class assigns basic constants and variables to the player object. Everytime a new player
-        object is created, it created following this template.
+        object is created, it is created following this template.
         """
         self.x = random.randint(25,screenWidth - 25)
         self.y = random.randint(25,screenHeight - 25)
@@ -29,7 +29,7 @@ class Player:
         self.veloctiy = 11
         
     def move(self):
-        """ (int),(int) ---> (None)
+        """ (None) ---> (None)
         This Function is responsible for the movement of player objects, with their direction dependent upon the mouses position 
         relative to the player object and their speed dependent upon the player's mass 
         """
@@ -71,7 +71,7 @@ class Player:
         
     def collision_detection(self, item_list, item_value, required_mass, camera):
         """ (list),(int),(int),(object) ---> (None)
-        This function identifies collisions between a variety of different objects with the player, and is maniputable in order to set
+        This function identifies collisions between a variety of different objects and the player, and is maniputable in order to set
         indentifiers that allow the player object to comprehend what it is collidiing with and how to react
         """
         for item in item_list:
@@ -112,7 +112,7 @@ class Player:
                     pygame.mixer.explode_sound.play()
                     
     def feed(self,food_blob_list,camera):
-        """ (list),(int),(int),(object) ---> (None)
+        """ (list),(object) ---> (None)
         This function checks whether the player objects mass is at or above a certain value, and if it is the function creates a food blob 
         and appends it to the food blob list for later updating and rendering. The function also subtracts 16 mass from the player object
         to make it seem as though the player object is actually shooting off a piece of itself
@@ -127,6 +127,8 @@ class Player:
             pass
 
     def explode(self,camera,viruses,food_blob_list):
+        """ (object),(list),(list) ---> (None)
+        """
          for item in viruses:
             if distance(self.x,self.y,item.x,item.y) <= self.mass/3 + (100/6) and self.mass >= 100:
                 segments = points_on_circumfrence(self.mass/3,7)
@@ -167,7 +169,7 @@ class Player:
         pass
     
     def render(self,camera):
-        """ (None) ---> (None)
+        """ (object) ---> (None)
         This function is resposible for rendering the player object on screen at the correct position, as well as consistently 
         rendering the players over the player object
         """
@@ -180,7 +182,7 @@ class Player:
         self.surface.blit(self.label, (int(self.x*camera.zoom+camera.x) - (self.label_offset/2),int(self.y*camera.zoom+camera.y)))        
 
     def update(self,food_list,food_blob_list,viruses,camera,screenWidth,screenHeight):
-        """ (None) ---> (None)
+        """ (list),(list),(list),(object),(int),(int) ---> (None)
         This function is responsible for sequentially running through all of the other functions 
         necessary to update as well as operate the player object
         """
