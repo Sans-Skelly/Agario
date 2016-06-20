@@ -73,6 +73,9 @@ class Segment(food_blobs):
         self.render_rejoin_timer(surface,screenWidth,screenHeight)
 
     def render_rejoin_timer(self,surface,screenWidth,screenHeight):
+        """ (object),(int),(int)  ---> (None)
+        Displays a timer in the top right corner of the screen counting down until the segments rejoin after splitting
+        """
         x = (screenWidth / 40)*37
         y = screenHeight / 40
         timer_label = myfont.render("Rejoin: " + (str(100-int(self.duration/4))),1,(0,0,0))
