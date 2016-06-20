@@ -8,7 +8,7 @@ pygame.mixer.init()
 
 class Player:
     def __init__(self,surface,screenHeight,screenWidth,playfieldWidth,playfieldHeight,name = "Unamed Cell",x=None,y=None,):
-        """ 
+        """ (object),(int),(int),(int),(int),(string),(int),(int) ---> (None)
         This portion of the Player class assigns basic constants and variables to the player object. Everytime a new player
         object is created, it is created following this template.
         """
