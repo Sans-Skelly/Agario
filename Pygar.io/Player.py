@@ -128,6 +128,7 @@ class Player:
 
     def explode(self,camera,viruses,food_blob_list):
         """ (object),(list),(list) ---> (None)
+        Makes the player explode into food blobs.
         """
          for item in viruses:
             if distance(self.x,self.y,item.x,item.y) <= self.mass/3 + (100/6) and self.mass >= 100:
