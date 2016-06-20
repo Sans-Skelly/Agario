@@ -3,7 +3,7 @@ from Additional_Functions import *
 
 class food_blobs:
     def __init__(self, surface, playfieldWidth, playfieldHeight, player_X, player_Y,player_mass, camera, player_color):     
-        """ 
+        """ (object),(int),(int),(int),(int),(int),(float),(object),(tuple) ---> (None)
         This class assigns basic constants and variables for food that is shot out of player objects. Everytime a player shoots out a food
         blob it creates a new object using this class as a template.
         """
@@ -40,13 +40,13 @@ class food_blobs:
             self.y = (self.playfieldHeight -(12))        
         
     def render(self,camera):
-        """ (None) ---> (None)
+        """ (object) ---> (None)
         This function is resposible for rendering food blobs on the screen
         """
         pygame.draw.circle(self.surface,self.color,(int(self.x*camera.zoom+camera.x),int(self.y*camera.zoom+camera.y)),int(camera.zoom*8))
 
     def update(self,camera):
-        """ (None) ---> (None)
+        """ (object) ---> (None)
         This function is responsible for sequentially running through all of the other functions 
         necessary to update and move the food blob objects.
         """
