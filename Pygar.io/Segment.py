@@ -3,7 +3,7 @@ from Additional_Functions import *
 from labels_and_text import *
 class Segment(food_blobs):
     def __init__(self, surface, playfieldWidth, playfieldHeight, player, camera):
-        """(object),(object),(object),(object) ---> (None)
+        """(object),(int),(int),(object),(object) ---> (None)
         This is a constructor method for the segment class
         """
         food_blobs.__init__(self, surface, playfieldWidth, playfieldHeight, player.x, player.y,player.mass, camera, player.color)
@@ -11,7 +11,7 @@ class Segment(food_blobs):
         self.duration = 0
 
     def collision_detection(self, item_list, item_value, required_mass, camera):
-        """(object),(list),(int),(int),(object) ---> (None)
+        """(list),(int),(int),(object) ---> (None)
         Detects collision with things.
         """
         for item in item_list:
@@ -21,7 +21,7 @@ class Segment(food_blobs):
                 pygame.mixer.Sound("Eat.wav").play() 
                 
     def fuse(self,player,segments,screenWidth,screenHeight,camera):
-        """(object),(object),(list),(int),(int),(object) ---> (None)
+        """(object),(list),(int),(int),(object) ---> (None)
         Fuses the Player and the segment
         """
         if int(self.velocity) <= 4:
@@ -36,7 +36,7 @@ class Segment(food_blobs):
             pygame.mixer.Sound("Merge.wav").play()
 
     def explode(self,camera,viruses,food_blob_list):
-        """(object),(object),(list),(list) ---> (None)
+        """(object),(list),(list) ---> (None)
         Makes the segment explode when it collides with a virus.
         """
         for item in viruses:
@@ -55,13 +55,13 @@ class Segment(food_blobs):
                     self.mass = self.mass-food_blob_size
     
     def render(self,camera):
-        """(object),(object) ---> (None)
+        """(object) ---> (None)
         Draws the segment
         """
         pygame.draw.circle(self.surface,self.color,(int(self.x*camera.zoom+camera.x),int(self.y*camera.zoom+camera.y)),int(camera.zoom*self.mass/3),0)
 
-    def update(self,surface,player,segments,viruses,item_list, item_list_2, item_value,item_value_2, required_mass,required_mass_2, camera,screenWidth,screenHeight):
-        """(object),(object),(list),(list),(list),(int),(int),(int),(int),(object),(int),(int) ---> (None)
+    def update(self,surface,player,segments,viruses,item_list, item_list_2, item_value,item_value_2, required_mass,required_mass_2,screenWidth,screenHeight,camera):
+        """(object),(object),(list),(list),(list),(list),(int),(int),(int),(int),(int),(int),(object) ---> (None)
         Updates the segment
         """
         self.render(camera)
@@ -82,7 +82,7 @@ class Segment(food_blobs):
         surface.blit(timer_label, (x,y))
         
 def split(segments,surface,playfieldWidth,playfieldHeight,player,camera):
-    """(list),(object),(object),(object) ---> (None)
+    """(list),(object),(int),(int),(object),(object) ---> (None)
     Splits the player into two.
     """
     segment = Segment(surface,playfieldWidth,playfieldHeight,player,camera)
