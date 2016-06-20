@@ -11,16 +11,17 @@ from Segment import *
 from Virus import *
 pygame.init()
 
+name = raw_input("Please Name Your Blob:")
 screenWidth, screenHeight = pygame.display.Info().current_w, pygame.display.Info().current_h
-playfieldWidth, playfieldHeight = 100,100
+playfieldWidth, playfieldHeight = 3000,3000
 screen=pygame.display.set_mode((screenWidth,screenHeight), pygame.FULLSCREEN,32)
-player = Player(screen,screenHeight,screenWidth,playfieldWidth,playfieldHeight)
+player = Player(screen,screenHeight,screenWidth,playfieldWidth,playfieldHeight,name)
 camera = Camera(screenWidth,screenHeight)
 food_list = []
 food_blob_list = []
 segments = []
 viruses = [Virus(screen,playfieldWidth,playfieldHeight) for i in range(25)]
-spawn_food(food_list,1000,screen,playfieldHeight,playfieldWidth)
+spawn_food(food_list,500,screen,playfieldHeight,playfieldWidth)
 pygame.key.set_repeat(1,2000)
 WHITE = (255,255,255)
 inPlay = True
@@ -37,7 +38,7 @@ while inPlay:
                 split(segments,screen,playfieldWidth,playfieldHeight,player,camera)
                 pygame.mixer.Sound("Split.wav").play()
 
-    camera.zoom = 1/(0.04*player.cameraValue) + 0.3
+    camera.zoom = 1/(0.03*player.cameraValue) + 0.3
     camera.centre(player,screenWidth, screenHeight)
 
     

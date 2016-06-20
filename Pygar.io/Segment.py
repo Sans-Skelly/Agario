@@ -17,7 +17,7 @@ class Segment(food_blobs):
         for item in item_list:
             if distance(self.x,self.y,item.x,item.y) <= self.mass/3 and self.mass > required_mass:
                 item_list.remove(item)
-                self.mass += 10*float(item_value)/self.mass
+                self.mass += 120*float(item_value)/self.mass
                 pygame.mixer.Sound("Eat.wav").play() 
                 
     def fuse(self,player,segments,screenWidth,screenHeight,camera):
@@ -30,7 +30,7 @@ class Segment(food_blobs):
                 self.x += int((player.velocity*math.cos(angle*math.pi/180))) 
                 self.y += int((player.velocity*math.sin(angle*math.pi/180)))
         
-        if self.duration >= 1000:
+        if self.duration >= 400:
             player.mass += self.mass
             segments.remove(self)
             pygame.mixer.Sound("Merge.wav").play()
@@ -75,7 +75,7 @@ class Segment(food_blobs):
     def render_rejoin_timer(self,surface,screenWidth,screenHeight):
         x = (screenWidth / 40)*37
         y = screenHeight / 40
-        timer_label = myfont.render("Rejoin: " + (str(100-int(self.duration/10))),1,(0,0,0))
+        timer_label = myfont.render("Rejoin: " + (str(100-int(self.duration/4))),1,(0,0,0))
         surface.blit(timer_label, (x,y))
         
 def split(segments,surface,playfieldWidth,playfieldHeight,player,camera):

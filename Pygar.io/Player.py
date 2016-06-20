@@ -14,7 +14,7 @@ class Player:
         """
         self.x = random.randint(25,screenWidth - 25)
         self.y = random.randint(25,screenHeight - 25)
-        self.mass = 50
+        self.mass = 16
         self.color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
         self.name = name
         self.surface = surface
@@ -106,7 +106,7 @@ class Player:
                     pygame.mixer.Sound("Eat.wav").play()
                     self.cameraValue = self.cameraValue
                 if item_value == 1:
-                    Food.spawn_food(item_list,1,self.surface,self.screenHeight+1100,self.screenWidth+1100)
+                    Food.spawn_food(item_list,1,self.surface,self.playfieldWidth,self.playfieldHeight)
                 elif item_value == 100.111:
                     self.explode(camera,item_list)
                     pygame.mixer.explode_sound.play()
@@ -186,7 +186,7 @@ class Player:
         """
         self.massLoss()
         self.move()
-        self.collision_detection(food_list,10,1,camera)
+        self.collision_detection(food_list,1,1,camera)
         self.collision_detection(food_blob_list,12,16,camera)
         self.explode(camera,viruses,food_blob_list)
         self.render(camera)
